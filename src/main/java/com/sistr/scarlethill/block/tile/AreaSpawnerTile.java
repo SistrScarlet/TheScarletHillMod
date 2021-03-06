@@ -37,8 +37,10 @@ public class AreaSpawnerTile extends TileEntity implements INamedContainerProvid
     private boolean isActiveWizard = false;
     private WizardStep wizardStep = WizardStep.AREA;
     private BlockPos wizardPos = null;
-    private List<BlockPos> wizardPosList = Lists.newArrayList();
-    private final ServerBossInfo bossInfo = new ServerBossInfo(new TranslationTextComponent("block.scarlethill.area_spawner.bossinfo"), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
+    private final List<BlockPos> wizardPosList = Lists.newArrayList();
+    private final ServerBossInfo bossInfo = new ServerBossInfo(
+            new TranslationTextComponent("block.scarlethill.area_spawner.bossinfo"),
+            BossInfo.Color.RED, BossInfo.Overlay.PROGRESS);
 
     private final AbstractAreaSpawner spawnerLogic = new AbstractAreaSpawner() {
 

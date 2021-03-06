@@ -52,7 +52,7 @@ public class ScarletPortalBlock extends Block {
                 } else {//地上へ帰るときはスポーンポイントへTP
                     transferDimension = DimensionType.OVERWORLD;
                     transferPos = serverPlayer.getBedLocation(transferDimension);
-                    if (transferPos == null || !serverPlayer.server.getWorld(transferDimension).getBlockState(transferPos).isIn(BlockTags.BEDS)) {
+                    if (!serverPlayer.server.getWorld(transferDimension).getBlockState(transferPos).isIn(BlockTags.BEDS)) {
                         transferPos = serverPlayer.getServerWorld().getSpawnPoint();
                     }
                 }

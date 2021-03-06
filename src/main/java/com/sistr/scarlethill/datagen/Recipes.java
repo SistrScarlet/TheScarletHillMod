@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.Ingredient;
 
 import java.util.function.Consumer;
 
+//todo 色々
 public class Recipes extends RecipeProvider {
 
     public Recipes(DataGenerator generatorIn) {

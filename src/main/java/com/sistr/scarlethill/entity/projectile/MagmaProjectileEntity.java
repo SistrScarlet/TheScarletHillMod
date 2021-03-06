@@ -61,6 +61,10 @@ public class MagmaProjectileEntity extends AbstractProjectile implements IRender
         living.setFire(5);
     }
 
+    public float getBrightness() {
+        return 1.0F;
+    }
+
     @Override
     public ItemStack getItem() {
         return Registration.LAVA_SPIT_ITEM.get().getDefaultInstance();

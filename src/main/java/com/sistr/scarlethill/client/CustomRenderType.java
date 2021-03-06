@@ -4,6 +4,9 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.util.OptionalDouble;
 
 public class CustomRenderType extends RenderType {
 
@@ -18,4 +21,30 @@ public class CustomRenderType extends RenderType {
                         .fog(BLACK_FOG).transparency(TRANSLUCENT_TRANSPARENCY).diffuseLighting(DIFFUSE_LIGHTING_ENABLED)
                         .alpha(DEFAULT_ALPHA).cull(CULL_DISABLED).lightmap(LIGHTMAP_ENABLED).overlay(OVERLAY_ENABLED).build(false));
     }
+
+    private static final LineState THICK_LINES = new LineState(OptionalDouble.of(3));
+
+    public static final RenderType OVERLAY_LINE_LOOP = makeType("overlay_line_loop",
+            DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINE_LOOP, 256,
+            RenderType.State.getBuilder().line(THICK_LINES)
+                    .layer(PROJECTION_LAYERING)
+                    .transparency(TRANSLUCENT_TRANSPARENCY)
+                    .texture(NO_TEXTURE)
+                    .depthTest(DEPTH_ALWAYS)
+                    .cull(CULL_DISABLED)
+                    .lightmap(LIGHTMAP_DISABLED)
+                    .writeMask(COLOR_WRITE)
+                    .build(false));
+
+    public static final RenderType OVERLAY_LINES = makeType("overlay_lines",
+            DefaultVertexFormats.POSITION_COLOR, GL11.GL_LINES, 256,
+            RenderType.State.getBuilder().line(THICK_LINES)
+                    .layer(PROJECTION_LAYERING)
+                    .transparency(TRANSLUCENT_TRANSPARENCY)
+                    .texture(NO_TEXTURE)
+                    .depthTest(DEPTH_ALWAYS)
+                    .cull(CULL_DISABLED)
+                    .lightmap(LIGHTMAP_DISABLED)
+                    .writeMask(COLOR_WRITE)
+                    .build(false));
 }

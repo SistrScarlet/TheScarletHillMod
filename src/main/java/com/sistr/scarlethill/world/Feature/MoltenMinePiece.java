@@ -75,12 +75,12 @@ public class MoltenMinePiece {
         protected void handleDataMarker(String p_186175_1_, BlockPos p_186175_2_, IWorld p_186175_3_, Random p_186175_4_, MutableBoundingBox p_186175_5_) {
         }
 
-        public boolean func_225577_a_(IWorld world, ChunkGenerator<?> generator, Random rand, MutableBoundingBox box, ChunkPos pos) {
+        public boolean create(IWorld world, ChunkGenerator<?> generator, Random rand, MutableBoundingBox box, ChunkPos pos) {
             BlockPos tempPos = this.templatePosition;
             if (!this.location.equals(MoltenMinePiece.Abyss)) {
                 this.templatePosition = this.templatePosition.add(0, -this.templatePosition.getY() + 5, 0);
             }
-            boolean flag = super.func_225577_a_(world, generator, rand, box, pos);
+            boolean flag = super.create(world, generator, rand, box, pos);
 
             this.templatePosition = tempPos;
             return flag;

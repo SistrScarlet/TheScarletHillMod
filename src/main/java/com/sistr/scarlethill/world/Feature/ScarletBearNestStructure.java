@@ -23,10 +23,10 @@ public class ScarletBearNestStructure extends ScatteredStructure<NoFeatureConfig
     }
 
     @Override
-    public boolean func_225558_a_(BiomeManager manager, ChunkGenerator<?> generator, Random rand, int chunkX, int chunkZ, Biome biome) {
+    public boolean canBeGenerated(BiomeManager manager, ChunkGenerator<?> generator, Random rand, int chunkX, int chunkZ, Biome biome) {
         //128以下だったら生成しない
         if (generator.func_222529_a(chunkX * 16, chunkZ * 16, WORLD_SURFACE_WG) < 128) return false;
-        return super.func_225558_a_(manager, generator, rand, chunkX, chunkZ, biome);
+        return super.canBeGenerated(manager, generator, rand, chunkX, chunkZ, biome);
     }
 
     public String getStructureName() {

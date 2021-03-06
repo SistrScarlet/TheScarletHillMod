@@ -2,7 +2,7 @@ package com.sistr.scarlethill.item;
 
 import com.sistr.scarlethill.setup.ModSetup;
 import com.sistr.scarlethill.setup.Registration;
-import com.sistr.scarlethill.util.MathUtil;
+import com.sistr.scarlethill.util.VecMathUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -49,7 +49,7 @@ public class ScarletGemItem extends Item implements ILeftClickable {
         ItemStack stack = player.getHeldItem(hand);
         if (player.getCooldownTracker().hasCooldown(this)) return ActionResult.resultFail(stack);
         player.getCooldownTracker().setCooldown(this, 40);
-        player.addPotionEffect(new EffectInstance(Registration.SCARLET_BLESSING.get(), 20, 0));
+        player.addPotionEffect(new EffectInstance(Registration.SCARLET_BLESSING_EFFECT.get(), 20, 0));
         player.playSound(SoundEvents.BLOCK_NOTE_BLOCK_CHIME, 1, 1.5F + world.rand.nextFloat() * 0.5F);
         return ActionResult.resultSuccess(stack);
     }
@@ -97,7 +97,7 @@ public class ScarletGemItem extends Item implements ILeftClickable {
             float count = radius * 8;
             for (int k = 0; k < count; k++) {
                 for (int i = 0; i < count; i++) {
-                    Vec3d pos = MathUtil.getVector(new Vec2f((float) k / count * 360, ((float) i / count * 2 - 1) * 180))
+                    Vec3d pos = VecMathUtil.getVector(new Vec2f((float) k / count * 360, ((float) i / count * 2 - 1) * 180))
                             .scale(MathHelper.sqrt(user.getRNG().nextFloat()) * (radius - 1) + 1)
                             .add(user.getPosX(), user.getPosY() + user.getEyeHeight(), user.getPosZ());
                     worldIn.addParticle(ParticleTypes.FLAME, pos.x, pos.y, pos.z, 0, 0, 0);

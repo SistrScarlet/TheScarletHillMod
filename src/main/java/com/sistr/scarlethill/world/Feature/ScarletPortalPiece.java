@@ -72,11 +72,11 @@ public class ScarletPortalPiece {
 
         //実際に生成する処理
         //templatePositionを中心に生成する
-        public boolean func_225577_a_(IWorld iWorld, ChunkGenerator<?> generator, Random rand, MutableBoundingBox box, ChunkPos chunkPos) {
+        public boolean create(IWorld iWorld, ChunkGenerator<?> generator, Random rand, MutableBoundingBox box, ChunkPos chunkPos) {
             BlockPos tempTempPos = this.templatePosition;
             int generatePosHeight = iWorld.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.templatePosition.getX(), this.templatePosition.getZ());
             this.templatePosition = this.templatePosition.add(0, generatePosHeight, 0);
-            boolean flag = super.func_225577_a_(iWorld, generator, rand, box, chunkPos);
+            boolean flag = super.create(iWorld, generator, rand, box, chunkPos);
             this.templatePosition = tempTempPos;
 
             return flag;

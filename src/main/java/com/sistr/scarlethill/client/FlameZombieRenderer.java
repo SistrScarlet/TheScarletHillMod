@@ -14,7 +14,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class FlameZombieRenderer extends AbstractZombieRenderer<FlameZombieEntity, ZombieModel<FlameZombieEntity>> {
     private static final ResourceLocation FLAME_ZOMBIE_TEXTURE = new ResourceLocation(ScarletHillMod.MODID, "textures/entity/flame_zombie.png");
 
-
     public FlameZombieRenderer(EntityRendererManager manager) {
         super(manager, new ZombieModel<>(0.0F, false), new ZombieModel<>(0.5F, true), new ZombieModel<>(1.0F, true));
     }

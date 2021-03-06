@@ -7,7 +7,7 @@ import net.minecraft.util.Direction;
 import javax.annotation.Nullable;
 import java.util.*;
 
-import static com.sistr.scarlethill.util.MathUtil.getManhattan;
+import static com.sistr.scarlethill.util.VecMathUtil.getManhattan;
 
 public class HorizonPathFinder {
     private final Set<Vec2i> map;

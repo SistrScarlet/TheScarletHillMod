@@ -509,7 +509,7 @@ public class CrimsonianEntity extends CreatureEntity implements IGroupable<Crims
                 return true;
 
                 //グループ解除処理
-            } else if (player.isShiftKeyDown() && this.getOwnerId().get().equals(player.getUniqueID())) {
+            } else if (player.isSneaking() && this.getOwnerId().get().equals(player.getUniqueID())) {
                 if (this.world instanceof ServerWorld) {
                     //所属中のグループの全員をグループ解除
                     this.getGroupController().ifPresent(controller -> controller.getMembers().forEach(memberId -> {
@@ -539,7 +539,7 @@ public class CrimsonianEntity extends CreatureEntity implements IGroupable<Crims
         }
 
         //シフトで待機
-        if (player.isShiftKeyDown()) {
+        if (player.isSneaking()) {
             Optional<UUID> optionalOwnerId = this.getOwnerId();
             if (optionalOwnerId.isPresent() && player.getUniqueID().equals(optionalOwnerId.get())) {
                 this.setWait(!this.isWait());
@@ -549,7 +549,7 @@ public class CrimsonianEntity extends CreatureEntity implements IGroupable<Crims
         }
 
         //以下は取引を開く
-        if (this.isChild() || !this.isAlive() && this.getCustomer() != null && this.isSleeping() && player.func_226563_dT_()) {
+        if (this.isChild() || !this.isAlive() && this.getCustomer() != null && this.isSleeping() && player.isSecondaryUseActive()) {
             return super.processInteract(player, hand);
         }
 

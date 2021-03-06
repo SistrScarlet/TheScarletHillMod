@@ -72,7 +72,7 @@ public class CreativeFillToolItem extends Item implements ILeftClickable {
     @Override
     public void onLeftClick(World worldIn, PlayerEntity playerIn, Hand handIn) {
         Item item = playerIn.getHeldItemOffhand().getItem();
-        if (playerIn.isShiftKeyDown() && item instanceof BlockItem) {
+        if (playerIn.isSneaking() && item instanceof BlockItem) {
             ItemStack stack = playerIn.getHeldItem(handIn);
             CompoundNBT compound = stack.getOrCreateTag();
             if (!compound.contains("LeftClickPos") || !compound.contains("RightClickPos")) return;

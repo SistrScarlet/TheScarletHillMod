@@ -120,7 +120,7 @@ public class CreativeWrenchItem extends Item implements ILeftClickable {
 
     @Override
     public void onLeftClick(World world, PlayerEntity player, Hand hand) {
-        if (player.isShiftKeyDown()) {
+        if (player.isSneaking()) {
             TileEntity wizard = world.getTileEntity(this.wizardBlockPos);
             if (wizard instanceof IHasWizardBlock) {
                 ((IHasWizardBlock) wizard).receiveDate(player, true);

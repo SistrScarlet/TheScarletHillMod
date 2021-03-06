@@ -1,6 +1,6 @@
 package com.sistr.scarlethill.entity.projectile;
 
-import com.sistr.scarlethill.util.MathUtil;
+import com.sistr.scarlethill.util.VecMathUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.*;
@@ -64,7 +64,7 @@ public abstract class AbstractProjectile extends Entity implements IProjectile {
             float theta = ((2F * this.rand.nextFloat()) - 1F) * (float) Math.PI;
             float randX = radius * MathHelper.cos(theta);
             float randY = radius * MathHelper.sin(theta);
-            vec3d = MathUtil.rotatePitchYaw(vec3d, randY, randX);
+            vec3d = VecMathUtil.rotatePitchYaw(vec3d, randY, randX);
         }
         vec3d = vec3d.normalize().scale(velocity);
         this.setMotion(vec3d);

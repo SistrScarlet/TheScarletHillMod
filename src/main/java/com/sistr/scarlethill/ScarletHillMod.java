@@ -1,6 +1,8 @@
 package com.sistr.scarlethill;
 
+import com.sistr.scarlethill.client.MagicSquareRenderer;
 import com.sistr.scarlethill.setup.*;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;

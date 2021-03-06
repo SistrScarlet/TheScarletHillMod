@@ -48,7 +48,7 @@ public class CrimsonianVillageStructure extends Structure<NoFeatureConfig> {
         return 8;
     }
 
-    public boolean func_225558_a_(BiomeManager manager, ChunkGenerator<?> generator, Random rand, int chunkX, int chunkZ, Biome biome) {
+    public boolean canBeGenerated(BiomeManager manager, ChunkGenerator<?> generator, Random rand, int chunkX, int chunkZ, Biome biome) {
         //生成高度の制限
         int height = generator.func_222529_a(chunkX * 16, chunkZ * 16, WORLD_SURFACE_WG);
         if (height < 66 || 96 < height) {

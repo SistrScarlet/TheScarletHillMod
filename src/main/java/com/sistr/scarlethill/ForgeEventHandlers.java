@@ -9,6 +9,7 @@ import com.sistr.scarlethill.network.Networking;
 import com.sistr.scarlethill.network.PacketLeftClick;
 import com.sistr.scarlethill.setup.Registration;
 import com.sistr.scarlethill.util.EffectUtil;
+import com.sistr.scarlethill.world.MagicSquareManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.Item;
@@ -16,6 +17,7 @@ import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityMobGriefingEvent;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
@@ -29,7 +31,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class ForgeEventHandlers {
-
 
     //クラサイドオンリー
     @SubscribeEvent
@@ -105,7 +106,7 @@ public class ForgeEventHandlers {
     //ダメージを無効化する
     private static void onScarletBlessing(LivingEvent event) {
         LivingEntity living = event.getEntityLiving();
-        if (living.getActivePotionEffect(Registration.SCARLET_BLESSING.get()) != null) {
+        if (living.getActivePotionEffect(Registration.SCARLET_BLESSING_EFFECT.get()) != null) {
             float radius = 3F;
             ScarletGemItem.bomb(living.world, living, radius, 4);
             EffectUtil.spawnParticleSphere((ServerWorld) living.world, ParticleTypes.FLAME, living.getPosX(), living.getPosY() + living.getEyeHeight(), living.getPosZ(), (int) radius * 8, radius);
@@ -125,6 +126,14 @@ public class ForgeEventHandlers {
                 }
             });
         }
+    }
+
+    @SubscribeEvent
+    public static void onWorldTick(TickEvent.WorldTickEvent event) {
+        if (event.phase != TickEvent.Phase.START) {
+            return;
+        }
+        MagicSquareManager.tick();
     }
 
 }

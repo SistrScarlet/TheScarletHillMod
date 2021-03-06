@@ -5,7 +5,7 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 //渡す値は角度でラジアンではない
-public class MathUtil {
+public class VecMathUtil {
 
     public static Vec3d rotatePitch(Vec3d vec3d, float pitch) {
         Vec2f spherical = getYawPitch(vec3d);

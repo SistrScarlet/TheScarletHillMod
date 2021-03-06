@@ -11,7 +11,7 @@ import com.sistr.scarlethill.entity.projectile.RockProjectileEntity;
 import com.sistr.scarlethill.setup.Registration;
 import com.sistr.scarlethill.util.EffectUtil;
 import com.sistr.scarlethill.util.HorizonPathFinder;
-import com.sistr.scarlethill.util.MathUtil;
+import com.sistr.scarlethill.util.VecMathUtil;
 import com.sistr.scarlethill.util.Vec2i;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -111,7 +111,7 @@ public class SOTSBodyEntity extends CreatureEntity implements IMob {
     public boolean attackEntityFrom(DamageSource source, float damage) {
         if (!this.isLowHealth && this.getHealth() < this.getMaxHealth() / 2) {
             this.isLowHealth = true;
-            this.addPotionEffect(new EffectInstance(Registration.SCARLET_BLESSING.get(), 200));
+            this.addPotionEffect(new EffectInstance(Registration.SCARLET_BLESSING_EFFECT.get(), 200));
             this.world.addParticle(ParticleTypes.EXPLOSION_EMITTER, this.getPosX(), this.getPosY() + this.getEyeHeight(), this.getPosZ(), 0, 0, 0);
             this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 3F, 0.5F);
             if (this.world.isRemote) {
@@ -119,7 +119,7 @@ public class SOTSBodyEntity extends CreatureEntity implements IMob {
                 float count = radius * 8;
                 for (int k = 0; k < count; k++) {
                     for (int i = 0; i < count; i++) {
-                        Vec3d pos = MathUtil.getVector(new Vec2f((float) k / count * 360, ((float) i / count * 2 - 1) * 180))
+                        Vec3d pos = VecMathUtil.getVector(new Vec2f((float) k / count * 360, ((float) i / count * 2 - 1) * 180))
                                 .scale(MathHelper.sqrt(this.getRNG().nextFloat()) * (radius - 1) + 1)
                                 .add(this.getPosX(), this.getPosY() + this.getEyeHeight(), this.getPosZ());
                         this.world.addParticle(ParticleTypes.FLAME, pos.x, pos.y, pos.z, 0, 0, 0);
@@ -207,7 +207,7 @@ public class SOTSBodyEntity extends CreatureEntity implements IMob {
 
         LivingEntity target = this.getAttackTarget();
         if (target != null) {
-            this.rotationYawHead = -MathUtil.getYawPitch(target.getPositionVec().subtract(this.getPositionVec())).x;
+            this.rotationYawHead = -VecMathUtil.getYawPitch(target.getPositionVec().subtract(this.getPositionVec())).x;
         }
 
         if ((this.ticksExisted & 3) == 0 && this.getHealth() <= 0) {
@@ -1130,7 +1130,7 @@ public class SOTSBodyEntity extends CreatureEntity implements IMob {
             //pathList.forEach(pos -> EffectUtil.spawnParticleBox((ServerWorld) this.molten.world, RedstoneParticleData.REDSTONE_DUST, pos.getX(), this.molten.getPosY(), pos.getZ(), 1, 0));
             Vec2i nearPath = HorizonPathFinder.getNearPos(new Vec2i(this.molten.getPosition()), pathList);
             //パスから離れている場合はリセット
-            int nearPathDistance = MathUtil.getManhattan(nearPath, new Vec2i(this.molten.getPosition()));
+            int nearPathDistance = VecMathUtil.getManhattan(nearPath, new Vec2i(this.molten.getPosition()));
             if (nearPathDistance > 3) {
                 return Optional.empty();
             }

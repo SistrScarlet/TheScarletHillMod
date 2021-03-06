@@ -12,7 +12,7 @@ import net.minecraft.potion.EffectType;
 public class ScarletBlessing extends Effect {
 
     public ScarletBlessing() {
-        super(EffectType.BENEFICIAL, 16720896);
+        super(EffectType.BENEFICIAL, 0xFF2400);
         this.addAttributesModifier(SharedMonsterAttributes.KNOCKBACK_RESISTANCE, "1B5F7DE9-1546-EA98-34AF-1B6D7C9C67EA", 1.0D, AttributeModifier.Operation.ADDITION);
     }
 

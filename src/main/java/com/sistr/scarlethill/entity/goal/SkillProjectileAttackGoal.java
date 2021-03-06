@@ -1,7 +1,7 @@
 package com.sistr.scarlethill.entity.goal;
 
 import com.sistr.scarlethill.entity.projectile.AbstractProjectile;
-import com.sistr.scarlethill.util.MathUtil;
+import com.sistr.scarlethill.util.VecMathUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MobEntity;
 import net.minecraft.util.math.Vec3d;
@@ -41,7 +41,7 @@ public abstract class SkillProjectileAttackGoal<T extends AbstractProjectile> ex
 
     //やり方が泥臭い
     protected Vec3d getAngle(Vec3d shootPos, Vec3d targetPos) {
-        float velocity = this.projectile.getVelocity();
+        float velocity = this.projectile.getVelocity() + this.addVelocity();
         float drag = this.projectile.getAirDrag();
         float gravity = this.projectile.getGravity();
         double distanceSq;
@@ -51,7 +51,7 @@ public abstract class SkillProjectileAttackGoal<T extends AbstractProjectile> ex
         //弾道の終点と対象との距離が1以下になるまで角度を変えて試行
         getAngle:
         for (int testAngle = -90; testAngle < 90; testAngle++) {
-            Vec3d motion = MathUtil.rotatePitch(baseAngle, testAngle).normalize().scale(velocity);
+            Vec3d motion = VecMathUtil.rotatePitch(baseAngle, testAngle).normalize().scale(velocity);
             Vec3d checkPoint = shootPos;
             double inLoopNearDistanceSq = -1;
             //ある角度から発射された弾道の計算
@@ -80,7 +80,7 @@ public abstract class SkillProjectileAttackGoal<T extends AbstractProjectile> ex
                 motion = motion.scale(drag).add(0, -gravity, 0);
             }
         }
-        return MathUtil.rotatePitch(baseAngle, nearAngle);
+        return VecMathUtil.rotatePitch(baseAngle, nearAngle);
     }
 
     protected void shooting(Vec3d shootPos, Vec3d angle) {

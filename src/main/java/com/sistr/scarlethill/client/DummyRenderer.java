@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class DummyRenderer extends EntityRenderer<DummyEntity> {
 
-    protected DummyRenderer(EntityRendererManager renderManager) {
+    public DummyRenderer(EntityRendererManager renderManager) {
         super(renderManager);
     }
 

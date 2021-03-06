@@ -9,12 +9,12 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 
 //ぶん殴るスキル
@@ -28,7 +28,8 @@ public class SkillMeleeAttackGoal extends SkillAttackGoal {
     private double attackPosY;
     private double attackPosZ;
 
-    public SkillMeleeAttackGoal(MobEntity attacker, int startupLength, int actionLength, int freezeLength, int chance, float damage, float range, AttackRangeShape shape) {
+    public SkillMeleeAttackGoal(MobEntity attacker, int startupLength, int actionLength, int freezeLength,
+                                int chance, float damage, float range, AttackRangeShape shape) {
         super(attacker, startupLength, actionLength, freezeLength, chance, damage, range, 0, range);
         this.shape = shape;
         this.setMutexFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
@@ -69,91 +70,124 @@ public class SkillMeleeAttackGoal extends SkillAttackGoal {
     protected void actionStart() {
         switch (this.shape) {
             case TRIANGLE:
-                attackByTriangle();
+                attackByTriangle(this.goalOwner.world, this.goalOwner,
+                        new Vec3d(this.attackPosX, this.attackPosY, this.attackPosZ),
+                        this.damage, this.range * 1.5, this.range / 2);
             case ROUND:
             case SQUARE:
         }
     }
 
-    //あんまりにもクソ長いので別メソッドとして処理
-    //大雑把に言うと、開始地点の異なる4本の線でレイトレースしている
-    //線と線の間？当然何も判定しとりません。
-    //今数学の勉強中なので、いい感じのを思いついたら独自の当たり判定に切り替えたい
-    private void attackByTriangle() {
-        Vec3d targetPos = new Vec3d(this.attackPosX, this.attackPosY, this.attackPosZ);
-        Vec3d attackerPos = new Vec3d(this.goalOwner.getPosX(), this.goalOwner.getPosY() + this.goalOwner.getEyeHeight(), this.goalOwner.getPosZ());
+    //敵が範囲内なら攻撃する
+    public static void attackByTriangle(World world, LivingEntity attacker, Vec3d attackPos, float damage, double length, double width) {
+        Vec3d attackerPos = new Vec3d(attacker.getPosX(), attacker.getPosY() + attacker.getEyeHeight(), attacker.getPosZ());
 
-        //攻撃者から敵対象が居る地点へのベクトル。直接レイトレースには使わない
-        Vec3d toTargetVec = targetPos.subtract(attackerPos).normalize();
+        //攻撃者から敵対象が居る地点へのベクトル。当たり判定には直接使わない
+        Vec3d toTargetVec = attackPos.subtract(attackerPos).normalize();
 
-        double radius = this.range / 4;
-        float rotate = 90F * ((float) Math.PI / 180F);
-
-        //このベクトル自体は直接使用しない。真横に線を伸ばす
-        Vec3d rightVec = toTargetVec.rotateYaw(rotate).scale(radius);
-        Vec3d leftVec = toTargetVec.rotateYaw(-rotate).scale(radius);
-
-        //これも使わない。線を上下に分割
-        Vec3d rightTopVec = rightVec.add(0, radius, 0);
-        Vec3d rightBottomVec = rightVec.subtract(0, radius, 0);
-        Vec3d leftTopVec = leftVec.add(0, radius, 0);
-        Vec3d leftBottomVec = leftVec.subtract(0, radius, 0);
-
-        //実際にレイトレースに使用する。線の先っぽの地点
-        Vec3d rightTopPos = attackerPos.add(rightTopVec);
-        Vec3d rightBottomPos = attackerPos.add(rightBottomVec);
-        Vec3d leftTopPos = attackerPos.add(leftTopVec);
-        Vec3d leftBottomPos = attackerPos.add(leftBottomVec);
-
-        double range = this.range * 1.5D;
-
-        //レイトレースの終点。大体の場合、敵対象の背後の地点になる
-        Vec3d toTargetPos = attackerPos.add(toTargetVec.scale(range));
-
-        World world = this.goalOwner.world;
+        //終点。大体の場合、敵対象の背後の地点になる
+        //壁貫通はしない
+        Vec3d toTargetPos = attackerPos.add(toTargetVec.scale(length));
+        BlockRayTraceResult result = world.rayTraceBlocks(new RayTraceContext(toTargetVec, toTargetPos,
+                RayTraceContext.BlockMode.COLLIDER, RayTraceContext.FluidMode.NONE, attacker));
+        if (result.getType() != RayTraceResult.Type.MISS) {
+            toTargetPos = result.getHitVec();
+        }
 
         //周囲の敵のリスト
-        List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, this.goalOwner.getBoundingBox().grow(range), (entity ->
-                entity.isAlive() && entity.canBeCollidedWith() && !entity.isSpectator() && entity != this.goalOwner));
+        List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, attacker.getBoundingBox().grow(length), (entity ->
+                entity.isAlive() && entity.canBeCollidedWith() && !entity.isSpectator() && entity != attacker));
 
         //攻撃範囲内の敵のリスト
-        List<Entity> targetList = Lists.newArrayList();
-
-        //レイトレースx5。要素がめちゃ重複するかも
-        rayTraceEntity(rightTopPos, toTargetPos, entityList, targetList);
-        rayTraceEntity(rightBottomPos, toTargetPos, entityList, targetList);
-        rayTraceEntity(leftTopPos, toTargetPos, entityList, targetList);
-        rayTraceEntity(leftBottomPos, toTargetPos, entityList, targetList);
-        rayTraceEntity(attackerPos, toTargetPos, entityList, targetList);
-
-        DamageSource source = DamageSource.causeMobDamage(this.goalOwner);
+        List<Entity> targetList = checkAttackRange(attackerPos, toTargetPos, entityList, width, length);
 
         if (!targetList.isEmpty()) {
-            world.playSound(null, this.goalOwner.getPosition(), SoundEvents.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, this.goalOwner.getSoundCategory(), 1.0F, 1.2F);
+            world.playSound(null, attacker.getPosition(),
+                    SoundEvents.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, attacker.getSoundCategory(), 1.0F, 1.2F);
             //重複は省いて、範囲内のエンティティにダメージを与える
             targetList.stream().distinct().forEach((entity -> {
-                if (entity.attackEntityFrom(source, this.damage) && entity instanceof LivingEntity) {
+                DamageSource source = DamageSource.causeMobDamage(attacker);
+                if (entity.attackEntityFrom(source, damage) && entity instanceof LivingEntity) {
                     float pi = (float) Math.PI;
-                    ((LivingEntity) entity).knockBack(this.goalOwner, this.damage / 10, MathHelper.sin(this.goalOwner.rotationYaw * (pi / 180F)), -MathHelper.cos(this.goalOwner.rotationYaw * (pi / 180F)));
+                    ((LivingEntity) entity).knockBack(attacker, damage / 10,
+                            MathHelper.sin(attacker.rotationYaw * (pi / 180F)),
+                            -MathHelper.cos(attacker.rotationYaw * (pi / 180F)));
                 }
             }));
         }
 
         //パーティクル演出
-        if (world instanceof ServerWorld) {
-            EffectUtil.spawnParticleLine((ServerWorld) world, ParticleTypes.CRIT, rightTopPos, toTargetPos, 8, 0.2D);
-            EffectUtil.spawnParticleLine((ServerWorld) world, ParticleTypes.CRIT, rightBottomPos, toTargetPos, 8, 0.2D);
-            EffectUtil.spawnParticleLine((ServerWorld) world, ParticleTypes.CRIT, leftTopPos, toTargetPos, 8, 0.2D);
-            EffectUtil.spawnParticleLine((ServerWorld) world, ParticleTypes.CRIT, leftBottomPos, toTargetPos, 8, 0.2D);
-            EffectUtil.spawnParticleLine((ServerWorld) world, ParticleTypes.CRIT, attackerPos, toTargetPos, 8, 0.2D);
-        }
-
+        //横向き二次関数グラフを横に三つ並べて爪っぽく
+        Vec3d rotVec = toTargetVec.rotateYaw(90).scale(width / 2);
+        EffectUtil.spawnParticleQuadraticLineHorizon((ServerWorld) world, ParticleTypes.CRIT,
+                attackerPos.add(0, 1, 0).add(rotVec), toTargetPos.add(rotVec), 32, 0D);
+        EffectUtil.spawnParticleQuadraticLineHorizon((ServerWorld) world, ParticleTypes.CRIT,
+                attackerPos.add(0, 1, 0), toTargetPos, 32, 0D);
+        EffectUtil.spawnParticleQuadraticLineHorizon((ServerWorld) world, ParticleTypes.CRIT,
+                attackerPos.add(0, 1, 0).subtract(rotVec), toTargetPos.subtract(rotVec), 32, 0D);
     }
 
-    //始点から終点までの座標上の全エンティティを、targetのリストに加える
-    //一行でできるならわざわざメソッド化しなくてもよかったかもしれない
-    private void rayTraceEntity(Vec3d start, Vec3d end, List<Entity> check, List<Entity> target) {
-        check.stream().filter(entity -> entity.getBoundingBox().rayTrace(start, end).isPresent()).forEach(target::add);
+    //リストのエンティティが攻撃範囲に含まれるかチェックして返す
+    //点(entity)と線(attacker-target)の距離を調べ、width以下ならヒット
+    //entityがattackerから離れるほどwidthは減る
+    //attackerと同じ位置の場合のwidthは100%、maxLengthまで離れるとwidthが0%になる
+    //減り方は線形
+    public static List<Entity> checkAttackRange(Vec3d attackerPos, Vec3d toTargetPos, List<Entity> entityList, double width, double maxLength) {
+        List<Entity> hitEntity = Lists.newArrayList();
+        Iterator<Entity> iterator = entityList.iterator();
+        while (iterator.hasNext()) {
+            Entity entity = iterator.next();
+            double x;
+            //xをattacker-target間に収める
+            if (attackerPos.getX() < entity.getPosX() && entity.getPosX() < toTargetPos.getX()
+                    || toTargetPos.getX() < entity.getPosX() && entity.getPosX() < attackerPos.getX()) {
+                x = entity.getPosX();
+            } else {
+                if (Math.abs(attackerPos.getX() - entity.getPosX()) < Math.abs(toTargetPos.getX() - entity.getPosX())) {
+                    x = attackerPos.getX();
+                } else {
+                    x = toTargetPos.getX();
+                }
+            }
+            //attackerPosとtoTargetPosの二点を通る直線の方程式から、zを求める
+            double z = ((toTargetPos.getZ() - attackerPos.getZ()) / (toTargetPos.getX() - attackerPos.getX())) * (x - attackerPos.getX()) + attackerPos.getZ();
+            //点(x, z)とentityの距離
+            double d = MathHelper.sqrt((entity.getPosX() - x) * (entity.getPosX() - x) + (entity.getPosZ() - z) * (entity.getPosZ() - z));
+            //点とentityとの距離がwidth以下ならtrue
+            //値の調整として、距離はentityの幅分減らす。また、widthはentity-attackerPos間の距離が遠いほど狭まる
+            if (d - entity.getWidth() < width - (attackerPos.distanceTo(entity.getPositionVec()) / maxLength) * width) {
+                hitEntity.add(entity);
+                iterator.remove();
+            }
+        }
+        iterator = entityList.iterator();
+        //方角によって判定がおかしくなるのでxz入れ替えてもう一度
+        while (iterator.hasNext()) {
+            Entity entity = iterator.next();
+            double z;
+            //zをattacker-target間に収める
+            if (attackerPos.getZ() < entity.getPosZ() && entity.getPosZ() < toTargetPos.getZ()
+                    || toTargetPos.getZ() < entity.getPosZ() && entity.getPosZ() < attackerPos.getZ()) {
+                z = entity.getPosZ();
+            } else {
+                if (Math.abs(attackerPos.getZ() - entity.getPosZ()) < Math.abs(toTargetPos.getZ() - entity.getPosZ())) {
+                    z = attackerPos.getZ();
+                } else {
+                    z = toTargetPos.getZ();
+                }
+            }
+            //attackerPosとtoTargetPosの二点を通る直線の方程式から、xを求める
+            double x = ((toTargetPos.getX() - attackerPos.getX()) / (toTargetPos.getZ() - attackerPos.getZ())) * (z - attackerPos.getZ()) + attackerPos.getX();
+            //点(x, z)とentityの距離
+            double d = MathHelper.sqrt((entity.getPosZ() - z) * (entity.getPosZ() - z) + (entity.getPosX() - x) * (entity.getPosX() - x));
+            //点とentityとの距離がwidth以下ならtrue
+            //値の調整として、距離はentityの幅分減らす。また、widthはentity-attackerPos間の距離が遠いほど狭まる
+            if (d - entity.getWidth() < width - (attackerPos.distanceTo(entity.getPositionVec()) / maxLength) * width) {
+                hitEntity.add(entity);
+                iterator.remove();
+            }
+        }
+        return hitEntity;
     }
 
     //攻撃の形状。実際には立体となる

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import com.sistr.scarlethill.ScarletHillMod;
 import com.sistr.scarlethill.entity.SOTSBodyEntity;
 import com.sistr.scarlethill.entity.SOTSFistEntity;
-import com.sistr.scarlethill.util.MathUtil;
+import com.sistr.scarlethill.util.VecMathUtil;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Matrix3f;
 import net.minecraft.client.renderer.Matrix4f;
@@ -46,30 +46,30 @@ public class SOTSRenderer extends MobRenderer<SOTSBodyEntity, SOTSModel<SOTSBody
             int topWidth = 20;
             int bottomWidth = 8;
             //手前
-            this.pointBuilder(posMatrix, normalMatrix, builder, -bottomWidth, -length, bottomWidth, alpha, 0.0F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, bottomWidth, -length, bottomWidth, alpha, 0.5F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, topWidth, 0, topWidth, alpha, 0.5F, 0.15625F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, topWidth, alpha, 0.0F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -bottomWidth, -length, bottomWidth, alpha, 0.0F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, bottomWidth, -length, bottomWidth, alpha, 0.5F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, topWidth, 0, topWidth, alpha, 0.5F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, topWidth, alpha, 0.0F, 0.15625F);
             //奥
-            this.pointBuilder(posMatrix, normalMatrix, builder, bottomWidth, -length, -bottomWidth, alpha, 0.5F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, -bottomWidth, -length, -bottomWidth, alpha, 0.0F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, -topWidth, alpha, 0.0F, 0.15625F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, topWidth, 0, -topWidth, alpha, 0.5F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, bottomWidth, -length, -bottomWidth, alpha, 0.5F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -bottomWidth, -length, -bottomWidth, alpha, 0.0F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, -topWidth, alpha, 0.0F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, topWidth, 0, -topWidth, alpha, 0.5F, 0.15625F);
             //右
-            this.pointBuilder(posMatrix, normalMatrix, builder, bottomWidth, -length, bottomWidth, alpha, 0.0F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, bottomWidth, -length, -bottomWidth, alpha, 0.5F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, topWidth, 0, -topWidth, alpha, 0.5F, 0.15625F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, topWidth, 0, topWidth, alpha, 0.0F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, bottomWidth, -length, bottomWidth, alpha, 0.0F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, bottomWidth, -length, -bottomWidth, alpha, 0.5F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, topWidth, 0, -topWidth, alpha, 0.5F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, topWidth, 0, topWidth, alpha, 0.0F, 0.15625F);
             //左
-            this.pointBuilder(posMatrix, normalMatrix, builder, -bottomWidth, -length, -bottomWidth, alpha, 0.5F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, -bottomWidth, -length, bottomWidth, alpha, 0.0F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, topWidth, alpha, 0.0F, 0.15625F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, -topWidth, alpha, 0.5F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -bottomWidth, -length, -bottomWidth, alpha, 0.5F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -bottomWidth, -length, bottomWidth, alpha, 0.0F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, topWidth, alpha, 0.0F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, -topWidth, alpha, 0.5F, 0.15625F);
             //蓋
-            this.pointBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, topWidth, alpha, 0.0F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, topWidth, 0, topWidth, alpha, 0.5F, 0.0F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, topWidth, 0, -topWidth, alpha, 0.5F, 0.15625F);
-            this.pointBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, -topWidth, alpha, 0.0F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, topWidth, alpha, 0.0F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, topWidth, 0, topWidth, alpha, 0.5F, 0.0F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, topWidth, 0, -topWidth, alpha, 0.5F, 0.15625F);
+            this.vertexBuilder(posMatrix, normalMatrix, builder, -topWidth, 0, -topWidth, alpha, 0.0F, 0.15625F);
 
             matrixStackIn.pop();
 
@@ -89,20 +89,20 @@ public class SOTSRenderer extends MobRenderer<SOTSBodyEntity, SOTSModel<SOTSBody
         Matrix4f posMatrix = entry.getMatrix();
         Matrix3f normalMatrix = entry.getNormal();
 
-        Vec3d handPos = MathUtil.lerpVec(partialTicks, hand.getPositionVec(), new Vec3d(hand.prevPosX, hand.prevPosY, hand.prevPosZ));
+        Vec3d handPos = VecMathUtil.lerpVec(partialTicks, hand.getPositionVec(), new Vec3d(hand.prevPosX, hand.prevPosY, hand.prevPosZ));
         Vec3d parentPos = molten.getPositionVec();
         Vec3d handRelPos = handPos.subtract(parentPos).scale(16);
         int handX = (int) handRelPos.x;
         int handY = (int) handRelPos.y;
         int handZ = (int) handRelPos.z;
-        Vec2f yawPitch = MathUtil.getYawPitch(handRelPos);
+        Vec2f yawPitch = VecMathUtil.getYawPitch(handRelPos);
         float jointRot = hand.getHand() == SOTSFistEntity.FistSide.RIGHT ? -5 : 5;
-        Vec3d jointRelPos = MathUtil.getVector(new Vec2f(yawPitch.x + jointRot, (yawPitch.y + 90) / 2)).scale(3).scale(16);
+        Vec3d jointRelPos = VecMathUtil.getVector(new Vec2f(yawPitch.x + jointRot, (yawPitch.y + 90) / 2)).scale(3).scale(16);
         int jointX = (int) jointRelPos.x;
         int jointY = (int) jointRelPos.y;
         int jointZ = (int) jointRelPos.z;
         int armWidth = 24;
-        Vec3d rotate = MathUtil.getVector(new Vec2f(yawPitch.x + 90, yawPitch.y)).scale(armWidth);
+        Vec3d rotate = VecMathUtil.getVector(new Vec2f(yawPitch.x + 90, yawPitch.y)).scale(armWidth);
         int offsetX = (int) rotate.x;
         int offsetZ = (int) rotate.z;
         int topPY = 0;
@@ -114,51 +114,51 @@ public class SOTSRenderer extends MobRenderer<SOTSBodyEntity, SOTSModel<SOTSBody
         //UVの求め方 U:横軸 V:縦軸 当てたいテクスチャの座標 / テクスチャの全体解像度 = UまたはVの値
         //上腕
         //上
-        this.pointBuilder(posMatrix, normalMatrix, builder, -offsetX, +topPY, -offsetZ, alpha, 0.0F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, +offsetX, +topPY, +offsetZ, alpha, 1F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + topJY, jointZ + offsetZ, alpha, 1F, 0.15625F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + topJY, jointZ - offsetZ, alpha, 0.0F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, -offsetX, +topPY, -offsetZ, alpha, 0.0F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, +offsetX, +topPY, +offsetZ, alpha, 1F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + topJY, jointZ + offsetZ, alpha, 1F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + topJY, jointZ - offsetZ, alpha, 0.0F, 0.15625F);
         //下
-        this.pointBuilder(posMatrix, normalMatrix, builder, +offsetX, +bottomPY, +offsetZ, alpha, 1F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, -offsetX, +bottomPY, -offsetZ, alpha, 0.0F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + bottomJY, jointZ - offsetZ, alpha, 0.0F, 0.15625F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + bottomJY, jointZ + offsetZ, alpha, 1F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, +offsetX, +bottomPY, +offsetZ, alpha, 1F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, -offsetX, +bottomPY, -offsetZ, alpha, 0.0F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + bottomJY, jointZ - offsetZ, alpha, 0.0F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + bottomJY, jointZ + offsetZ, alpha, 1F, 0.15625F);
         //右
-        this.pointBuilder(posMatrix, normalMatrix, builder, -offsetX, +bottomPY, -offsetZ, alpha, 1F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, -offsetX, +topPY, -offsetZ, alpha, 0.0F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + topJY, jointZ - offsetZ, alpha, 0.0F, 0.15625F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + bottomJY, jointZ - offsetZ, alpha, 1F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, -offsetX, +bottomPY, -offsetZ, alpha, 1F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, -offsetX, +topPY, -offsetZ, alpha, 0.0F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + topJY, jointZ - offsetZ, alpha, 0.0F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + bottomJY, jointZ - offsetZ, alpha, 1F, 0.15625F);
         //左
-        this.pointBuilder(posMatrix, normalMatrix, builder, +offsetX, +topPY, +offsetZ, alpha, 0.0F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, +offsetX, +bottomPY, +offsetZ, alpha, 1F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + bottomJY, jointZ + offsetZ, alpha, 1F, 0.15625F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + topJY, jointZ + offsetZ, alpha, 0.0F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, +offsetX, +topPY, +offsetZ, alpha, 0.0F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, +offsetX, +bottomPY, +offsetZ, alpha, 1F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + bottomJY, jointZ + offsetZ, alpha, 1F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + topJY, jointZ + offsetZ, alpha, 0.0F, 0.15625F);
         //前腕
         //上
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + topJY, jointZ - offsetZ, alpha, 0.0F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + topJY, jointZ + offsetZ, alpha, 1F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, handX + offsetX, handY + topHY, handZ + offsetZ, alpha, 1F, 0.15625F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, handX - offsetX, handY + topHY, handZ - offsetZ, alpha, 0.0F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + topJY, jointZ - offsetZ, alpha, 0.0F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + topJY, jointZ + offsetZ, alpha, 1F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, handX + offsetX, handY + topHY, handZ + offsetZ, alpha, 1F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, handX - offsetX, handY + topHY, handZ - offsetZ, alpha, 0.0F, 0.15625F);
         //下
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + bottomJY, jointZ + offsetZ, alpha, 1F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + bottomJY, jointZ - offsetZ, alpha, 0.0F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, handX - offsetX, handY + bottomHY, handZ - offsetZ, alpha, 0.0F, 0.15625F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, handX + offsetX, handY + bottomHY, handZ + offsetZ, alpha, 1F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + bottomJY, jointZ + offsetZ, alpha, 1F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + bottomJY, jointZ - offsetZ, alpha, 0.0F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, handX - offsetX, handY + bottomHY, handZ - offsetZ, alpha, 0.0F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, handX + offsetX, handY + bottomHY, handZ + offsetZ, alpha, 1F, 0.15625F);
         //右
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + bottomJY, jointZ - offsetZ, alpha, 1F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + topJY, jointZ - offsetZ, alpha, 0.0F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, handX - offsetX, handY + topHY, handZ - offsetZ, alpha, 0.0F, 0.15625F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, handX - offsetX, handY + bottomHY, handZ - offsetZ, alpha, 1F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + bottomJY, jointZ - offsetZ, alpha, 1F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX - offsetX, jointY + topJY, jointZ - offsetZ, alpha, 0.0F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, handX - offsetX, handY + topHY, handZ - offsetZ, alpha, 0.0F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, handX - offsetX, handY + bottomHY, handZ - offsetZ, alpha, 1F, 0.15625F);
         //左
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + topJY, jointZ + offsetZ, alpha, 0.0F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + bottomJY, jointZ + offsetZ, alpha, 1F, 0.0F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, handX + offsetX, handY + bottomHY, handZ + offsetZ, alpha, 1F, 0.15625F);
-        this.pointBuilder(posMatrix, normalMatrix, builder, handX + offsetX, handY + topHY, handZ + offsetZ, alpha, 0.0F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + topJY, jointZ + offsetZ, alpha, 0.0F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, jointX + offsetX, jointY + bottomJY, jointZ + offsetZ, alpha, 1F, 0.0F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, handX + offsetX, handY + bottomHY, handZ + offsetZ, alpha, 1F, 0.15625F);
+        this.vertexBuilder(posMatrix, normalMatrix, builder, handX + offsetX, handY + topHY, handZ + offsetZ, alpha, 0.0F, 0.15625F);
 
         matrixStackIn.pop();
     }
 
-    public void pointBuilder(Matrix4f posMatrix, Matrix3f normalMatrix, IVertexBuilder builder, int x, int y, int z, int alpha, float u, float v) {
+    public void vertexBuilder(Matrix4f posMatrix, Matrix3f normalMatrix, IVertexBuilder builder, int x, int y, int z, int alpha, float u, float v) {
         builder.pos(posMatrix, x, y, z).color(255, 255, 255, alpha).tex(u, v)
                 .overlay(0, 32).lightmap(240).normal(normalMatrix, 0, 1, 0).endVertex();
     }

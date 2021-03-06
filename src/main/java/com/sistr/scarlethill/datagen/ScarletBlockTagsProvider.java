@@ -15,6 +15,17 @@ public class ScarletBlockTagsProvider extends ForgeBlockTagsProvider {
     @Override
     public void registerTags() {
         getBuilder(Tags.Blocks.STONE).add(Registration.SCARLET_STONE_BLOCK.get());
+        getBuilder(BlockTags.STAIRS).add(Registration.SCARLET_STONE_STAIRS_BLOCK.get());
+        getBuilder(BlockTags.SLABS).add(Registration.SCARLET_STONE_SLAB_BLOCK.get());
+        getBuilder(BlockTags.WALLS).add(Registration.SCARLET_STONE_WALL_BLOCK.get());
+        getBuilder(Tags.Blocks.COBBLESTONE).add(Registration.SCARLET_COBBLE_STONE_BLOCK.get());
+        getBuilder(BlockTags.STAIRS).add(Registration.SCARLET_COBBLE_STONE_STAIRS_BLOCK.get());
+        getBuilder(BlockTags.SLABS).add(Registration.SCARLET_COBBLE_STONE_SLAB_BLOCK.get());
+        getBuilder(BlockTags.WALLS).add(Registration.SCARLET_COBBLE_STONE_WALL_BLOCK.get());
+        getBuilder(BlockTags.STONE_BRICKS).add(Registration.SCARLET_STONE_BRICKS_BLOCK.get());
+        getBuilder(BlockTags.STAIRS).add(Registration.SCARLET_STONE_BRICK_STAIRS_BLOCK.get());
+        getBuilder(BlockTags.SLABS).add(Registration.SCARLET_STONE_BRICK_SLAB_BLOCK.get());
+        getBuilder(BlockTags.WALLS).add(Registration.SCARLET_STONE_BRICK_WALL_BLOCK.get());
         getBuilder(BlockTags.LOGS).add(Registration.SCARLET_LOG_BLOCK.get());
         getBuilder(BlockTags.PLANKS).add(Registration.SCARLET_PLANKS_BLOCK.get());
         getBuilder(BlockTags.WOODEN_STAIRS).add(Registration.SCARLET_PLANKS_STAIRS_BLOCK.get());

@@ -120,7 +120,6 @@ public class BlockLootTables extends BaseLootTableProvider {
                                                 .acceptCondition(BlockStateProperty.builder(block)
                                                         .fromProperties(StatePropertiesPredicate.Builder.newBuilder()
                                                                 .withIntProp(ScarletSnowBlock.LAYERS, 7))),
-                                        //雪ブロック(固めたやつ)が無いのでここだけ変えてる
                                         ItemLootEntry.builder(Registration.SCARLET_SNOW_BLOCK.get()).acceptFunction(SetCount.builder(ConstantRange.of(8)))
                                                 .acceptCondition(BlockStateProperty.builder(block)
                                                         .fromProperties(StatePropertiesPredicate.Builder.newBuilder()
@@ -222,14 +221,14 @@ public class BlockLootTables extends BaseLootTableProvider {
 
     private static LootTable.Builder func_229436_h_(Block p_229436_0_) {
         return LootTable.builder().addLootPool(LootPool.builder().acceptCondition(SILK_TOUCH).rolls(ConstantRange.of(1))
-                .addEntry(ItemLootEntry.builder(p_229436_0_).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY).replaceOperation("Bees", "BlockEntityTag.Bees")).acceptFunction(CopyBlockState.func_227545_a_(p_229436_0_).func_227552_a_(BeehiveBlock.field_226873_c_))));
+                .addEntry(ItemLootEntry.builder(p_229436_0_).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY).replaceOperation("Bees", "BlockEntityTag.Bees")).acceptFunction(CopyBlockState.func_227545_a_(p_229436_0_).func_227552_a_(BeehiveBlock.HONEY_LEVEL))));
     }
 
     private static LootTable.Builder func_229437_i_(Block p_229437_0_) {
         return LootTable.builder().addLootPool(LootPool.builder().rolls(ConstantRange.of(1)).addEntry(ItemLootEntry.builder(p_229437_0_)
                 .acceptCondition(SILK_TOUCH).acceptFunction(CopyNbt.builder(CopyNbt.Source.BLOCK_ENTITY)
                         .replaceOperation("Bees", "BlockEntityTag.Bees"))
-                .acceptFunction(CopyBlockState.func_227545_a_(p_229437_0_).func_227552_a_(BeehiveBlock.field_226873_c_))
+                .acceptFunction(CopyBlockState.func_227545_a_(p_229437_0_).func_227552_a_(BeehiveBlock.HONEY_LEVEL))
                 .alternatively(ItemLootEntry.builder(p_229437_0_))));
     }
 

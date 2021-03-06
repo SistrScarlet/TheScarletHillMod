@@ -4,9 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 
-public class ScarletBrickBlock extends Block {
+public class ScarletStoneBricksBlock extends Block {
 
-    public ScarletBrickBlock() {
+    public ScarletStoneBricksBlock() {
         super(Properties.create(Material.ROCK, MaterialColor.RED)
                 .hardnessAndResistance(1.5F, 6.0F)
         );

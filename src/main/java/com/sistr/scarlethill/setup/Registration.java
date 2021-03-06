@@ -2,11 +2,14 @@ package com.sistr.scarlethill.setup;
 
 import com.sistr.scarlethill.ScarletHillMod;
 import com.sistr.scarlethill.block.*;
+import com.sistr.scarlethill.block.ScarletCobbleStoneBlock;
 import com.sistr.scarlethill.block.tile.*;
+import com.sistr.scarlethill.effect.ScarletBlazing;
 import com.sistr.scarlethill.effect.ScarletBlessing;
 import com.sistr.scarlethill.entity.*;
 import com.sistr.scarlethill.entity.projectile.MagmaProjectileEntity;
 import com.sistr.scarlethill.entity.projectile.RockProjectileEntity;
+import com.sistr.scarlethill.entity.projectile.ScarletProjectileEntity;
 import com.sistr.scarlethill.item.*;
 import com.sistr.scarlethill.item.egg.*;
 import com.sistr.scarlethill.world.Feature.*;
@@ -35,6 +38,7 @@ import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.apache.logging.log4j.core.config.plugins.util.ResolverUtil;
 
 import static com.sistr.scarlethill.ScarletHillMod.MODID;
 
@@ -69,6 +73,17 @@ public class Registration {
 
     //Blockレジストリ
     public static final RegistryObject<ScarletStoneBlock> SCARLET_STONE_BLOCK = BLOCKS.register("scarlet_stone", ScarletStoneBlock::new);
+    public static final RegistryObject<ScarletStoneStairsBlock> SCARLET_STONE_STAIRS_BLOCK = BLOCKS.register("scarlet_stone_stairs", ScarletStoneStairsBlock::new);
+    public static final RegistryObject<ScarletStoneSlabBlock> SCARLET_STONE_SLAB_BLOCK = BLOCKS.register("scarlet_stone_slab", ScarletStoneSlabBlock::new);
+    public static final RegistryObject<ScarletStoneWallBlock> SCARLET_STONE_WALL_BLOCK = BLOCKS.register("scarlet_stone_wall", ScarletStoneWallBlock::new);
+    public static final RegistryObject<ScarletCobbleStoneBlock> SCARLET_COBBLE_STONE_BLOCK = BLOCKS.register("scarlet_cobblestone", ScarletCobbleStoneBlock::new);
+    public static final RegistryObject<ScarletCobbleStoneStairsBlock> SCARLET_COBBLE_STONE_STAIRS_BLOCK = BLOCKS.register("scarlet_cobblestone_stairs", ScarletCobbleStoneStairsBlock::new);
+    public static final RegistryObject<ScarletCobbleStoneSlabBlock> SCARLET_COBBLE_STONE_SLAB_BLOCK = BLOCKS.register("scarlet_cobblestone_slab", ScarletCobbleStoneSlabBlock::new);
+    public static final RegistryObject<ScarletCobbleStoneWallBlock> SCARLET_COBBLE_STONE_WALL_BLOCK = BLOCKS.register("scarlet_cobblestone_wall", ScarletCobbleStoneWallBlock::new);
+    public static final RegistryObject<ScarletStoneBricksBlock> SCARLET_STONE_BRICKS_BLOCK = BLOCKS.register("scarlet_stone_bricks", ScarletStoneBricksBlock::new);
+    public static final RegistryObject<ScarletStoneBrickStairsBlock> SCARLET_STONE_BRICK_STAIRS_BLOCK = BLOCKS.register("scarlet_stone_brick_stairs", ScarletStoneBrickStairsBlock::new);
+    public static final RegistryObject<ScarletStoneBrickSlabBlock> SCARLET_STONE_BRICK_SLAB_BLOCK = BLOCKS.register("scarlet_stone_brick_slab", ScarletStoneBrickSlabBlock::new);
+    public static final RegistryObject<ScarletStoneBrickWallBlock> SCARLET_STONE_BRICK_WALL_BLOCK = BLOCKS.register("scarlet_stone_brick_wall", ScarletStoneBrickWallBlock::new);
     public static final RegistryObject<ScarletLogBlock> SCARLET_LOG_BLOCK = BLOCKS.register("scarlet_log", ScarletLogBlock::new);
     public static final RegistryObject<ScarletPlanksBlock> SCARLET_PLANKS_BLOCK = BLOCKS.register("scarlet_planks", ScarletPlanksBlock::new);
     public static final RegistryObject<ScarletPlanksStairsBlock> SCARLET_PLANKS_STAIRS_BLOCK = BLOCKS.register("scarlet_planks_stairs", ScarletPlanksStairsBlock::new);
@@ -84,6 +99,17 @@ public class Registration {
 
     //BlockItemレジストリ
     public static final RegistryObject<Item> SCARLET_STONE_ITEM = ITEMS.register("scarlet_stone", () -> new BlockItem(SCARLET_STONE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_STONE_STAIRS_ITEM = ITEMS.register("scarlet_stone_stairs", () -> new BlockItem(SCARLET_STONE_STAIRS_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_STONE_SLAB_ITEM = ITEMS.register("scarlet_stone_slab", () -> new BlockItem(SCARLET_STONE_SLAB_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_STONE_WALL_ITEM = ITEMS.register("scarlet_stone_wall", () -> new BlockItem(SCARLET_STONE_WALL_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_COBBLE_STONE_ITEM = ITEMS.register("scarlet_cobblestone", () -> new BlockItem(SCARLET_COBBLE_STONE_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_COBBLE_STONE_STAIRS_ITEM = ITEMS.register("scarlet_cobblestone_stairs", () -> new BlockItem(SCARLET_COBBLE_STONE_STAIRS_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_COBBLE_STONE_SLAB_ITEM = ITEMS.register("scarlet_cobblestone_slab", () -> new BlockItem(SCARLET_COBBLE_STONE_SLAB_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_COBBLE_STONE_WALL_ITEM = ITEMS.register("scarlet_cobblestone_wall", () -> new BlockItem(SCARLET_COBBLE_STONE_WALL_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_STONE_BRICKS_ITEM = ITEMS.register("scarlet_stone_bricks", () -> new BlockItem(SCARLET_STONE_BRICKS_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_STONE_BRICK_STAIRS_ITEM = ITEMS.register("scarlet_stone_brick_stairs", () -> new BlockItem(SCARLET_STONE_BRICK_STAIRS_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_STONE_BRICK_SLAB_ITEM = ITEMS.register("scarlet_stone_brick_slab", () -> new BlockItem(SCARLET_STONE_BRICK_SLAB_BLOCK.get(), properties));
+    public static final RegistryObject<Item> SCARLET_STONE_BRICK_WALL_ITEM = ITEMS.register("scarlet_stone_brick_wall", () -> new BlockItem(SCARLET_STONE_BRICK_WALL_BLOCK.get(), properties));
     public static final RegistryObject<Item> SCARLET_LOG_ITEM = ITEMS.register("scarlet_log", () -> new BlockItem(SCARLET_LOG_BLOCK.get(), properties));
     public static final RegistryObject<Item> SCARLET_PLANKS_ITEM = ITEMS.register("scarlet_planks", () -> new BlockItem(SCARLET_PLANKS_BLOCK.get(), properties));
     public static final RegistryObject<Item> SCARLET_PLANKS_STAIRS_ITEM = ITEMS.register("scarlet_planks_stairs", () -> new BlockItem(SCARLET_PLANKS_STAIRS_BLOCK.get(), properties));
@@ -100,14 +126,17 @@ public class Registration {
     //todo 黄昏みたいにアイテムロストや死を堪えるやつほしい
     //アイテムレジストリ
     public static final RegistryObject<ScarletKeyItem> SCARLET_KEY_ITEM = ITEMS.register("scarlet_key", ScarletKeyItem::new);
+    public static final RegistryObject<EscapeAmuletItem> ESCAPE_AMULET_ITEM = ITEMS.register("escape_amulet", EscapeAmuletItem::new);
     public static final RegistryObject<ScarletBearClawItem> SCARLET_BEAR_CLAW_ITEM = ITEMS.register("scarlet_bear_claw", ScarletBearClawItem::new);
     public static final RegistryObject<ScarletGemItem> SCARLET_GEM_ITEM = ITEMS.register("scarlet_gem", ScarletGemItem::new);
+    public static final RegistryObject<ScarletWandItem> SCARLET_WAND_ITEM = ITEMS.register("scarlet_wand", ScarletWandItem::new);
     public static final RegistryObject<ScarletSnowBallItem> SCARLET_SNOWBALL_ITEM = ITEMS.register("scarlet_snowball", ScarletSnowBallItem::new);
     public static final RegistryObject<LavaSpitItem> LAVA_SPIT_ITEM = ITEMS.register("lava_spit", LavaSpitItem::new);
     public static final RegistryObject<CreativeFillToolItem> CREATIVE_FILL_TOOL_ITEM = ITEMS.register("fill_tool", CreativeFillToolItem::new);
     public static final RegistryObject<CreativeWrenchItem> CREATIVE_WRENCH_ITEM = ITEMS.register("wrench", CreativeWrenchItem::new);
     public static final RegistryObject<SearchStructureTool> SEARCH_STRUCTURE_TOOL_ITEM = ITEMS.register("search_structure_tool", SearchStructureTool::new);
-    public static final RegistryObject<TestArmorItem> TEST_ARMOR_ITEM = ITEMS.register("test_armor", TestArmorItem::new);
+    public static final RegistryObject<TestItem> TEST_ITEM = ITEMS.register("test_item", TestItem::new);
+    public static final RegistryObject<RedMagicItem> RED_MAGIC_ITEM = ITEMS.register("red_magic", RedMagicItem::new);
 
     //スポーンエッグレジストリ
     public static final RegistryObject<ScarletBearSpawnEggItem> SCARLET_BEAR_SPAWN_EGG_ITEM = ITEMS.register("scarlet_bear_spawn_egg", ScarletBearSpawnEggItem::new);
@@ -135,6 +164,12 @@ public class Registration {
                     .setShouldReceiveVelocityUpdates(false)
                     .immuneToFire()
                     .build("spawn_of_the_scarlet_fist"));
+    public static final RegistryObject<EntityType<RobeEntity>> ROBE_BOSS = ENTITIES.register("robe", () ->
+            EntityType.Builder.create(RobeEntity::new, EntityClassification.MONSTER)
+                    .size(0.6F, 1.95F)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .immuneToFire()
+                    .build("robe"));
     public static final RegistryObject<EntityType<FlameZombieEntity>> FLAME_ZOMBIE_MOB = ENTITIES.register("flame_zombie", () ->
             EntityType.Builder.create(FlameZombieEntity::new, EntityClassification.MONSTER)
                     .size(0.6F, 1.95F)
@@ -170,6 +205,11 @@ public class Registration {
                     .size(0.5F, 0.5F)
                     .setShouldReceiveVelocityUpdates(false)
                     .build("magma_projectile"));
+    public static final RegistryObject<EntityType<ScarletProjectileEntity>> SCARLET_PROJECTILE = ENTITIES.register("scarlet_projectile", () ->
+            EntityType.Builder.create((EntityType.IFactory<ScarletProjectileEntity>) ScarletProjectileEntity::new, EntityClassification.MISC)
+                    .size(1F, 1F)
+                    .setShouldReceiveVelocityUpdates(false)
+                    .build("scarlet_projectile"));
     public static final RegistryObject<EntityType<DummyEntity>> DUMMY_ENTITY = ENTITIES.register("dummy", () ->
             EntityType.Builder.create((EntityType.IFactory<DummyEntity>) DummyEntity::new, EntityClassification.MISC)
                     .size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
@@ -177,13 +217,13 @@ public class Registration {
                     .build("dummy"));
 
     //フィーチャーレジストリ
-    //ストラクチャ/フィーチャーの登録順かなんかの問題で分割している
+    //登録順かなんかの問題で分割している
     //Biome以外ではRegistryObjectから取ること
-    public static Structure<NoFeatureConfig> SCARLET_PORTAL_STRUCTURE_BEFORE = new ScarletPortalStructure(NoFeatureConfig::deserialize);
-    public static Structure<NoFeatureConfig> SCARLET_CRIMSONIAN_VILLAGE_BEFORE = new CrimsonianVillageStructure(NoFeatureConfig::deserialize);
-    public static Structure<NoFeatureConfig> SCARLET_BEAR_NEST_STRUCTURE_BEFORE = new ScarletBearNestStructure(NoFeatureConfig::deserialize);
-    public static Structure<NoFeatureConfig> MOLTEN_MINE_STRUCTURE_BEFORE = new MoltenMineStructure(NoFeatureConfig::deserialize);
-    public static Feature<NoFeatureConfig> SCARLET_FREEZE_TOP_LAYER_BEFORE = new ScarletIceAndSnowFeature(NoFeatureConfig::deserialize);
+    public static final Structure<NoFeatureConfig> SCARLET_PORTAL_STRUCTURE_BEFORE = new ScarletPortalStructure(NoFeatureConfig::deserialize);
+    public static final Structure<NoFeatureConfig> SCARLET_CRIMSONIAN_VILLAGE_BEFORE = new CrimsonianVillageStructure(NoFeatureConfig::deserialize);
+    public static final Structure<NoFeatureConfig> SCARLET_BEAR_NEST_STRUCTURE_BEFORE = new ScarletBearNestStructure(NoFeatureConfig::deserialize);
+    public static final Structure<NoFeatureConfig> MOLTEN_MINE_STRUCTURE_BEFORE = new MoltenMineStructure(NoFeatureConfig::deserialize);
+    public static final Feature<NoFeatureConfig> SCARLET_FREEZE_TOP_LAYER_BEFORE = new ScarletIceAndSnowFeature(NoFeatureConfig::deserialize);
 
     public static final RegistryObject<Structure<NoFeatureConfig>> SCARLET_PORTAL_STRUCTURE = FEATURES.register("scarlet_portal", () -> SCARLET_PORTAL_STRUCTURE_BEFORE);
     public static final RegistryObject<Structure<NoFeatureConfig>> SCARLET_CRIMSONIAN_VILLAGE_STRUCTURE = FEATURES.register("crimsonian_village", () -> SCARLET_CRIMSONIAN_VILLAGE_BEFORE);
@@ -217,7 +257,8 @@ public class Registration {
             new BlockItem(AREA_SPAWNER_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<TileEntityType<AreaSpawnerTile>> AREA_SPAWNER_TILE = TILES.register("area_spawner", () ->
             TileEntityType.Builder.create(AreaSpawnerTile::new, AREA_SPAWNER_BLOCK.get()).build(null));
-    public static final RegistryObject<ContainerType<AreaSpawnerContainer>> AREA_SPAWNER_CONTAINER = CONTAINERS.register("area_spawner", () -> IForgeContainerType.create((windowId, inv, data) -> {
+    public static final RegistryObject<ContainerType<AreaSpawnerContainer>> AREA_SPAWNER_CONTAINER = CONTAINERS.register("area_spawner", () ->
+            IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         return new AreaSpawnerContainer(windowId, ScarletHillMod.proxy.getClientWorld(), pos, inv, ScarletHillMod.proxy.getClientPlayer());
     }));
@@ -227,7 +268,8 @@ public class Registration {
             new BlockItem(SPAWNER_MARKER_BLOCK.get(), new Item.Properties().group(ModSetup.ITEM_GROUP)));
     public static final RegistryObject<TileEntityType<SpawnMarkerTile>> SPAWNER_MARKER_TILE = TILES.register("spawn_marker", () ->
             TileEntityType.Builder.create(SpawnMarkerTile::new, SPAWNER_MARKER_BLOCK.get()).build(null));
-    public static final RegistryObject<ContainerType<SpawnMarkerContainer>> SPAWNER_MARKER_CONTAINER = CONTAINERS.register("spawn_marker", () -> IForgeContainerType.create((windowId, inv, data) -> {
+    public static final RegistryObject<ContainerType<SpawnMarkerContainer>> SPAWNER_MARKER_CONTAINER =
+            CONTAINERS.register("spawn_marker", () -> IForgeContainerType.create((windowId, inv, data) -> {
         BlockPos pos = data.readBlockPos();
         return new SpawnMarkerContainer(windowId, ScarletHillMod.proxy.getClientWorld(), pos, inv, ScarletHillMod.proxy.getClientPlayer());
     }));
@@ -256,5 +298,6 @@ public class Registration {
     public static final RegistryObject<SoundEvent> NONE = SOUNDS.register("none", () -> new SoundEvent(new ResourceLocation(MODID, "none")));
 
     //ポーションレジストリ
-    public static final RegistryObject<Effect> SCARLET_BLESSING = POTIONS.register("scarlet_blessing", ScarletBlessing::new);
+    public static final RegistryObject<Effect> SCARLET_BLESSING_EFFECT = POTIONS.register("scarlet_blessing", ScarletBlessing::new);
+    public static final RegistryObject<Effect> SCARLET_BLAZING_EFFECT = POTIONS.register("scarlet_blazing", ScarletBlazing::new);
 }

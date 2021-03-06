@@ -50,7 +50,7 @@ public class MoltenMineStructure extends Structure<NoFeatureConfig> {
         return 8;
     }
 
-    public boolean func_225558_a_(BiomeManager manager, ChunkGenerator<?> generator, Random rand, int chunkX, int chunkZ, Biome biome) {
+    public boolean canBeGenerated(BiomeManager manager, ChunkGenerator<?> generator, Random rand, int chunkX, int chunkZ, Biome biome) {
         //128以下だったら生成しない
         if (generator.func_222529_a(chunkX * 16, chunkZ * 16, WORLD_SURFACE_WG) < 128) return false;
         ChunkPos chunkpos = this.getStartPositionForPosition(generator, rand, chunkX, chunkZ, 0, 0);
